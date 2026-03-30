@@ -1,16 +1,16 @@
 class ScrollcodeRelay < Formula
     desc "Local macOS relay for iOS and Codex App Server RPC"
     homepage "https://github.com/ScollCode/homebrew-scrollcode"
-    version "0.1.0"
+    version "0.1.1"
 
     on_macos do
       on_arm do
-        url "https://github.com/ScollCode/homebrew-scrollcode/releases/download/v0.1.0/ScrollCode_0.1.0_darwin_arm64.tar.gz"
+        url "https://github.com/ScollCode/homebrew-scrollcode/releases/download/v0.1.0/ScrollCode_0.1.1_darwin_arm64.tar.gz"
         sha256 "ARM64_SHA256"
       end
 
       on_intel do
-        url "https://github.com/ScollCode/homebrew-scrollcode/releases/download/v0.1.0/ScrollCode_0.1.0_darwin_amd64.tar.gz"
+        url "https://github.com/ScollCode/homebrew-scrollcode/releases/download/v0.1.0/ScrollCode_0.1.1_darwin_amd64.tar.gz"
         sha256 "AMD64_SHA256"
       end
     end
