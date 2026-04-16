@@ -1,8 +1,8 @@
-# Irisbrige Edge
+# Irisbrige Homebrew Tap
 
 [中文说明](./README_CN.md)
 
-`homebrew-irisbrige` provides installation and deployment entry points for `irisbrige-edge` across supported platforms.
+`homebrew-irisbrige` provides macOS Homebrew formulae for `irisbrige-edge` and `irisbrige-local`, plus deployment entry points for `irisbrige-edge` on other supported platforms.
 
 ## Contents
 
@@ -30,16 +30,16 @@ Supports both Apple Silicon and Intel Macs.
 brew tap Irisbrige/irisbrige
 ```
 
-2. Install:
+2. Install the edge formula:
 
 ```bash
-brew install irisbrige
+brew install irisbrige-edge
 ```
 
 3. Start the background service:
 
 ```bash
-brew services start irisbrige
+brew services start irisbrige-edge
 ```
 
 4. Check service status:
@@ -56,15 +56,23 @@ tail -f "$(brew --prefix)/var/log/irisbrige.log"
 
 Notes:
 
-- The installed executable is `irisbrige-edge`
+- The old formula name `irisbrige` is renamed to `irisbrige-edge` via `formula_renames.json`
 - The service starts `irisbrige-edge server` through a Homebrew-installed wrapper
+- The launchd label and log file names stay on the legacy `irisbrige` paths for migration compatibility
 - The runtime expects the `codex` CLI to be available on `PATH`
+
+Alternative local formula:
+
+```bash
+brew install irisbrige-local
+brew services start irisbrige-local
+```
 
 ### Service environment
 
 `brew services` starts `irisbrige-edge` under `launchd`. It does not inherit environment variables from your interactive shell startup files such as `.zshrc` or `.bashrc`.
 
-Instead of relying on shell environment inheritance, the background service uses one dedicated editable file:
+For `irisbrige-edge`, the background service uses one dedicated editable file:
 
 ```bash
 ~/.config/irisbrige-edge/service.env
@@ -85,16 +93,18 @@ If you prefer, the service wrapper also creates this file with commented example
 
 The wrapper loads this file before it starts `irisbrige-edge server`. The wrapper also preserves Homebrew's service `PATH`, so the `codex` CLI remains discoverable even if you add more variables here.
 
+For `irisbrige-local`, use the same layout under `~/.config/irisbrige-local/service.env` and manage the service with `brew services restart irisbrige-local`.
+
 After changing the file, restart the service:
 
 ```bash
-brew services restart irisbrige
+brew services restart irisbrige-edge
 ```
 
 If you want the wrapper to create the file template for you, start or restart the service once:
 
 ```bash
-brew services start irisbrige
+brew services start irisbrige-edge
 ```
 
 To verify that the editable env file was created or reloaded, check the service log for the wrapper message:
@@ -144,7 +154,8 @@ See:
 <a id="repository-contents"></a>
 ## Repository Contents
 
-- [Formula/irisbrige.rb](./Formula/irisbrige.rb): Homebrew formula for macOS
+- [Formula/irisbrige-edge.rb](./Formula/irisbrige-edge.rb): Homebrew formula for the edge macOS build
+- [Formula/irisbrige-local.rb](./Formula/irisbrige-local.rb): Homebrew formula for the local macOS build
 - [scripts/install-irisbrige-edge-linux.sh](./scripts/install-irisbrige-edge-linux.sh): automated Linux deployment script
 - [scripts/uninstall-irisbrige-edge-linux.sh](./scripts/uninstall-irisbrige-edge-linux.sh): Linux uninstaller script
 - [scripts/install-irisbrige-edge-windows.ps1](./scripts/install-irisbrige-edge-windows.ps1): automated Windows deployment script

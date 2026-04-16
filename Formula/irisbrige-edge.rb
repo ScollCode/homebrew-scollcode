@@ -1,35 +1,15 @@
-class Irisbrige < Formula
-  desc "Local macOS relay for iOS and Codex App Server RPC"
+class IrisbrigeEdge < Formula
+  desc "macOS relay for iOS and Codex App Server RPC (edge build)"
   homepage "https://github.com/Irisbrige/homebrew-irisbrige"
-  version "0.20.0"
+  version "0.22.0"
 
   if Hardware::CPU.arm?
-    url "https://github.com/Irisbrige/homebrew-irisbrige/releases/download/v0.20.0/irisbrige-edge_0.20.0_darwin_arm64.tar.gz"
-    sha256 "0777f1cabcca5efdfb7b34f1aeadc085e5f4d2bf2ba40104307aa22e6bdba313"
+    url "https://github.com/Irisbrige/homebrew-irisbrige/releases/download/v0.22.0/irisbrige-edge_0.22.0_darwin_arm64.tar.gz"
+    sha256 "63c8e393274c995eef9d803d151b663b57f13dd0ad40cdd41386388a3f8fc4b0"
   else
-    url "https://github.com/Irisbrige/homebrew-irisbrige/releases/download/v0.20.0/irisbrige-edge_0.20.0_darwin_amd64.tar.gz"
-    sha256 "bf2d69d90c0ec7aa76bbc8637290affd24fb92cd0343e29a57d144157e527e70"
+    url "https://github.com/Irisbrige/homebrew-irisbrige/releases/download/v0.22.0/irisbrige-edge_0.22.0_darwin_amd64.tar.gz"
+    sha256 "de7ea64fea0a912fcd7680a9029ff64aa97a5f88c6d07cf4e92fbbaaf9b5107c"
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   def install
     bin.install "irisbrige-edge"
@@ -90,6 +70,9 @@ class Irisbrige < Formula
   end
 
   service do
+    # Preserve the legacy launchd label so formula renames do not strand
+    # an already-installed background service on user machines.
+    name macos: "homebrew.mxcl.irisbrige"
     run [opt_libexec/"irisbrige-edge-service"]
     keep_alive true
     process_type :background
@@ -102,11 +85,11 @@ class Irisbrige < Formula
     <<~EOS
       Homebrew formulae cannot auto-start `brew services` during `brew install`.
 
-      The executable is installed as:
+      This formula installs the edge executable:
         irisbrige-edge
 
       Start the background service manually with:
-        brew services start irisbrige
+        brew services start irisbrige-edge
 
       `brew services` runs under `launchd` and does not inherit variables from
       your interactive shell.
@@ -124,10 +107,14 @@ class Irisbrige < Formula
         IRISBRIGE_ENV_CHECK=service-ready
 
       Restart after editing:
-        brew services restart irisbrige
+        brew services restart irisbrige-edge
 
       The service wrapper loads that file before it starts:
         irisbrige-edge server
+
+      The launchd label remains:
+        homebrew.mxcl.irisbrige
+      to preserve compatibility with existing service installations.
 
       Logs are written to:
         #{var}/log/irisbrige.log
