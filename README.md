@@ -57,8 +57,11 @@ tail -f "$(brew --prefix)/var/log/irisbrige.log"
 Notes:
 
 - The old formula name `irisbrige` is renamed to `irisbrige-edge` via `formula_renames.json`
-- The service starts `irisbrige-edge server` through a Homebrew-installed wrapper
-- The launchd label and log file names stay on the legacy `irisbrige` paths for migration compatibility
+- The `irisbrige-edge` service starts `irisbrige-edge server` through a Homebrew-installed wrapper
+- The launchd label is `homebrew.mxcl.irisbrige-edge`
+- The log file names still use the legacy `irisbrige` paths
+- The `irisbrige-local` launchd label is `homebrew.mxcl.irisbrige-local`
+- The `irisbrige-local` log files are `irisbrige-local.log` and `irisbrige-local.error.log`
 - The runtime expects the `codex` CLI to be available on `PATH`
 
 Alternative local formula:
@@ -66,6 +69,18 @@ Alternative local formula:
 ```bash
 brew install irisbrige-local
 brew services start irisbrige-local
+```
+
+### Legacy label migration
+
+Older `irisbrige-edge` releases used the launchd label `homebrew.mxcl.irisbrige`.
+If you already have that LaunchAgent, unload and remove it once before starting
+the current service so you do not leave two jobs behind:
+
+```bash
+launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/homebrew.mxcl.irisbrige.plist 2>/dev/null || true
+rm -f ~/Library/LaunchAgents/homebrew.mxcl.irisbrige.plist
+brew services start irisbrige-edge
 ```
 
 ### Service environment
@@ -95,6 +110,13 @@ The wrapper loads this file before it starts `irisbrige-edge server`. The wrappe
 
 For `irisbrige-local`, use the same layout under `~/.config/irisbrige-local/service.env` and manage the service with `brew services restart irisbrige-local`.
 
+Its launchd label is `homebrew.mxcl.irisbrige-local`, and its logs are written to:
+
+```bash
+$(brew --prefix)/var/log/irisbrige-local.log
+$(brew --prefix)/var/log/irisbrige-local.error.log
+```
+
 After changing the file, restart the service:
 
 ```bash
@@ -123,7 +145,7 @@ irisbrige-edge service: loaded environment from /Users/you/.config/irisbrige-edg
 To verify that a specific non-secret variable reached the running service process:
 
 ```bash
-PID="$(launchctl print gui/$(id -u)/homebrew.mxcl.irisbrige | awk '/pid = / {print $3; exit}')"
+PID="$(launchctl print gui/$(id -u)/homebrew.mxcl.irisbrige-edge | awk '/pid = / {print $3; exit}')"
 ps eww -p "$PID" | grep -F 'IRISBRIGE_ENV_CHECK=service-ready'
 ```
 

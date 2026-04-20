@@ -57,8 +57,11 @@ tail -f "$(brew --prefix)/var/log/irisbrige.log"
 注意：
 
 - 旧的 formula 名 `irisbrige` 已通过 `formula_renames.json` 迁移到 `irisbrige-edge`
-- 服务会通过 Homebrew 安装的 wrapper 启动 `irisbrige-edge server`
-- 为了平滑迁移，launchd label 和日志文件名仍保留旧的 `irisbrige` 路径
+- `irisbrige-edge` 服务会通过 Homebrew 安装的 wrapper 启动 `irisbrige-edge server`
+- launchd label 现在是 `homebrew.mxcl.irisbrige-edge`
+- 日志文件名仍保留旧的 `irisbrige` 路径
+- `irisbrige-local` 的 launchd label 是 `homebrew.mxcl.irisbrige-local`
+- `irisbrige-local` 的日志文件是 `irisbrige-local.log` 和 `irisbrige-local.error.log`
 - 运行时要求 `codex` CLI 在 `PATH` 中可用
 
 如果你要安装 local formula：
@@ -66,6 +69,18 @@ tail -f "$(brew --prefix)/var/log/irisbrige.log"
 ```bash
 brew install irisbrige-local
 brew services start irisbrige-local
+```
+
+### 旧 label 迁移
+
+较早版本的 `irisbrige-edge` 使用过 `homebrew.mxcl.irisbrige` 这个
+launchd label。如果你的机器上已经有这个旧 LaunchAgent，先做一次卸载
+和清理，再启动当前服务，避免残留两个任务：
+
+```bash
+launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/homebrew.mxcl.irisbrige.plist 2>/dev/null || true
+rm -f ~/Library/LaunchAgents/homebrew.mxcl.irisbrige.plist
+brew services start irisbrige-edge
 ```
 
 ### 服务环境变量
@@ -95,6 +110,13 @@ wrapper 会在启动 `irisbrige-edge server` 之前加载这个文件。wrapper 
 
 如果使用 `irisbrige-local`，对应路径改为 `~/.config/irisbrige-local/service.env`，服务管理命令改为 `brew services restart irisbrige-local`。
 
+它的 launchd label 是 `homebrew.mxcl.irisbrige-local`，日志写到：
+
+```bash
+$(brew --prefix)/var/log/irisbrige-local.log
+$(brew --prefix)/var/log/irisbrige-local.error.log
+```
+
 修改文件后需要重启服务：
 
 ```bash
@@ -123,7 +145,7 @@ irisbrige-edge service: loaded environment from /Users/you/.config/irisbrige-edg
 如果要确认某个非敏感变量已经进入运行中的服务进程，可以这样检查：
 
 ```bash
-PID="$(launchctl print gui/$(id -u)/homebrew.mxcl.irisbrige | awk '/pid = / {print $3; exit}')"
+PID="$(launchctl print gui/$(id -u)/homebrew.mxcl.irisbrige-edge | awk '/pid = / {print $3; exit}')"
 ps eww -p "$PID" | grep -F 'IRISBRIGE_ENV_CHECK=service-ready'
 ```
 

@@ -74,9 +74,7 @@ class IrisbrigeEdge < Formula
   end
 
   service do
-    # Preserve the legacy launchd label so formula renames do not strand
-    # an already-installed background service on user machines.
-    name macos: "homebrew.mxcl.irisbrige"
+    name macos: "homebrew.mxcl.irisbrige-edge"
     run [opt_libexec/"irisbrige-edge-service"]
     keep_alive true
     process_type :background
@@ -116,9 +114,13 @@ class IrisbrigeEdge < Formula
       The service wrapper loads that file before it starts:
         irisbrige-edge server
 
-      The launchd label remains:
-        homebrew.mxcl.irisbrige
-      to preserve compatibility with existing service installations.
+      The launchd label is:
+        homebrew.mxcl.irisbrige-edge
+
+      If you previously ran an older edge release with the legacy label,
+      unload it once before starting this version:
+        launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/homebrew.mxcl.irisbrige.plist 2>/dev/null || true
+        rm -f ~/Library/LaunchAgents/homebrew.mxcl.irisbrige.plist
 
       Logs are written to:
         #{var}/log/irisbrige.log

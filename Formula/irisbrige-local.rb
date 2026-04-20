@@ -74,6 +74,7 @@ class IrisbrigeLocal < Formula
   end
 
   service do
+    name macos: "homebrew.mxcl.irisbrige-local"
     run [opt_libexec/"irisbrige-local-service"]
     keep_alive true
     process_type :background
@@ -86,7 +87,7 @@ class IrisbrigeLocal < Formula
     <<~EOS
       Homebrew formulae cannot auto-start `brew services` during `brew install`.
 
-      The executable is installed as:
+      This formula installs the local executable:
         irisbrige-local
 
       Start the background service manually with:
@@ -112,6 +113,9 @@ class IrisbrigeLocal < Formula
 
       The service wrapper loads that file before it starts:
         irisbrige-local server
+
+      The launchd label is:
+        homebrew.mxcl.irisbrige-local
 
       Logs are written to:
         #{var}/log/irisbrige-local.log
