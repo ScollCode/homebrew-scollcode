@@ -30,7 +30,7 @@ class IrisbrigeEdge < Formula
       set -e
 
       SERVICE_BIN="#{opt_bin}/irisbrige-edge"
-      SERVICE_ENV_DIR="$HOME/.config/irisbrige-edge"
+      SERVICE_ENV_DIR="$HOME/.config/irisbrige"
       SERVICE_ENV_FILE="$SERVICE_ENV_DIR/service.env"
       SERVICE_PATH="${PATH:-}"
 
@@ -39,7 +39,7 @@ class IrisbrigeEdge < Formula
           umask 077
           mkdir -p "$SERVICE_ENV_DIR"
           printf '%s\n' \
-            '# irisbrige-edge background service environment' \
+            '# irisbrige background service environment shared by edge and local' \
             '# Edit this file directly. Add shell-compatible KEY=VALUE lines below.' \
             '#' \
             '# Examples:' \
@@ -103,8 +103,8 @@ class IrisbrigeEdge < Formula
       `brew services` runs under `launchd` and does not inherit variables from
       your interactive shell.
 
-      The background service uses a dedicated editable env file:
-        ~/.config/irisbrige-edge/service.env
+      The background service uses one shared editable env file:
+        ~/.config/irisbrige/service.env
 
       If the file does not exist, the service wrapper creates it with commented
       examples on first start.
@@ -139,6 +139,7 @@ class IrisbrigeEdge < Formula
 
   test do
     assert_path_exists libexec/"irisbrige-edge-service"
+    assert_match "$HOME/.config/irisbrige/service.env", (libexec/"irisbrige-edge-service").read
     assert_match "Usage:", shell_output("#{bin}/irisbrige-edge --help")
   end
 end

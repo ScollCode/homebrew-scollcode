@@ -87,17 +87,17 @@ brew services start irisbrige-edge
 
 `brew services` starts `irisbrige-edge` under `launchd`. It does not inherit environment variables from your interactive shell startup files such as `.zshrc` or `.bashrc`.
 
-For `irisbrige-edge`, the background service uses one dedicated editable file:
+For both `irisbrige-edge` and `irisbrige-local`, the background service uses one shared editable file:
 
 ```bash
-~/.config/irisbrige-edge/service.env
+~/.config/irisbrige/service.env
 ```
 
 You can create and edit that file directly:
 
 ```bash
-mkdir -p ~/.config/irisbrige-edge
-cat > ~/.config/irisbrige-edge/service.env <<'EOF'
+mkdir -p ~/.config/irisbrige
+cat > ~/.config/irisbrige/service.env <<'EOF'
 MY_PROVIDER_API_KEY=replace-me
 MY_CUSTOM_BASE_URL=https://example.com
 IRISBRIGE_ENV_CHECK=service-ready
@@ -106,30 +106,31 @@ EOF
 
 If you prefer, the service wrapper also creates this file with commented examples on first start when it is missing.
 
-The wrapper loads this file before it starts `irisbrige-edge server`. The wrapper also preserves Homebrew's service `PATH`, so the `codex` CLI remains discoverable even if you add more variables here.
+Both wrappers load this file before they start `irisbrige-edge server` or `irisbrige-local server`. The wrapper also preserves Homebrew's service `PATH`, so the `codex` CLI remains discoverable even if you add more variables here.
 
-For `irisbrige-local`, use the same layout under `~/.config/irisbrige-local/service.env` and manage the service with `brew services restart irisbrige-local`.
+If you previously used `~/.config/irisbrige-edge/service.env` or `~/.config/irisbrige-local/service.env`, move any custom entries into `~/.config/irisbrige/service.env`.
 
-Its launchd label is `homebrew.mxcl.irisbrige-local`, and its logs are written to:
+Each service keeps its own launchd label and logs. For `irisbrige-local`:
 
 ```bash
 $(brew --prefix)/var/log/irisbrige-local.log
 $(brew --prefix)/var/log/irisbrige-local.error.log
 ```
 
-After changing the file, restart the service:
+After changing the file, restart each service that should pick up the change:
 
 ```bash
 brew services restart irisbrige-edge
+brew services restart irisbrige-local
 ```
 
-If you want the wrapper to create the file template for you, start or restart the service once:
+If you want the wrapper to create the file template for you, start either service once:
 
 ```bash
 brew services start irisbrige-edge
 ```
 
-To verify that the editable env file was created or reloaded, check the service log for the wrapper message:
+To verify that the editable env file was created or reloaded, check the matching service log for the wrapper message. For `irisbrige-edge`:
 
 ```bash
 tail -n 20 "$(brew --prefix)/var/log/irisbrige.log"
@@ -138,8 +139,8 @@ tail -n 20 "$(brew --prefix)/var/log/irisbrige.log"
 You should see a line similar to one of these:
 
 ```text
-irisbrige-edge service: created editable env file at /Users/you/.config/irisbrige-edge/service.env
-irisbrige-edge service: loaded environment from /Users/you/.config/irisbrige-edge/service.env
+irisbrige-edge service: created editable env file at /Users/you/.config/irisbrige/service.env
+irisbrige-edge service: loaded environment from /Users/you/.config/irisbrige/service.env
 ```
 
 To verify that a specific non-secret variable reached the running service process:

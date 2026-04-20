@@ -87,17 +87,17 @@ brew services start irisbrige-edge
 
 `brew services` 是由 `launchd` 拉起 `irisbrige-edge` 的，它不会自动继承交互式 shell 的环境变量，例如 `.zshrc` 或 `.bashrc` 里的内容。
 
-对于 `irisbrige-edge`，后台服务不依赖 shell 环境继承，而是使用一个固定、可直接编辑的配置文件：
+对于 `irisbrige-edge` 和 `irisbrige-local`，后台服务统一使用同一个可直接编辑的配置文件：
 
 ```bash
-~/.config/irisbrige-edge/service.env
+~/.config/irisbrige/service.env
 ```
 
 你可以直接创建并编辑这个文件，加入任意 shell 兼容的 `KEY=VALUE`：
 
 ```bash
-mkdir -p ~/.config/irisbrige-edge
-cat > ~/.config/irisbrige-edge/service.env <<'EOF'
+mkdir -p ~/.config/irisbrige
+cat > ~/.config/irisbrige/service.env <<'EOF'
 MY_PROVIDER_API_KEY=replace-me
 MY_CUSTOM_BASE_URL=https://example.com
 IRISBRIGE_ENV_CHECK=service-ready
@@ -106,30 +106,31 @@ EOF
 
 如果你不想手动创建，service wrapper 也会在第一次启动且文件缺失时自动生成一个带注释示例的模板。
 
-wrapper 会在启动 `irisbrige-edge server` 之前加载这个文件。wrapper 也会保留 Homebrew service 的 `PATH`，所以 `codex` CLI 仍然可被找到。
+两个 wrapper 都会在启动 `irisbrige-edge server` 或 `irisbrige-local server` 之前加载这个文件。wrapper 也会保留 Homebrew service 的 `PATH`，所以 `codex` CLI 仍然可被找到。
 
-如果使用 `irisbrige-local`，对应路径改为 `~/.config/irisbrige-local/service.env`，服务管理命令改为 `brew services restart irisbrige-local`。
+如果你之前使用的是 `~/.config/irisbrige-edge/service.env` 或 `~/.config/irisbrige-local/service.env`，请把自定义变量迁移到 `~/.config/irisbrige/service.env`。
 
-它的 launchd label 是 `homebrew.mxcl.irisbrige-local`，日志写到：
+每个服务仍然保留各自的 launchd label 和日志。对于 `irisbrige-local`：
 
 ```bash
 $(brew --prefix)/var/log/irisbrige-local.log
 $(brew --prefix)/var/log/irisbrige-local.error.log
 ```
 
-修改文件后需要重启服务：
+修改文件后，需要把要生效的服务都重启一遍：
 
 ```bash
 brew services restart irisbrige-edge
+brew services restart irisbrige-local
 ```
 
-如果你想让 wrapper 帮你生成这个文件模板，可以先启动或重启一次服务：
+如果你想让 wrapper 帮你生成这个文件模板，先启动任意一个服务一次即可：
 
 ```bash
 brew services start irisbrige-edge
 ```
 
-要确认这个可编辑 env 文件已经创建或已被重新加载，可以看日志里的 wrapper 记录：
+要确认这个可编辑 env 文件已经创建或已被重新加载，可以查看对应服务的日志。下面以 `irisbrige-edge` 为例：
 
 ```bash
 tail -n 20 "$(brew --prefix)/var/log/irisbrige.log"
@@ -138,8 +139,8 @@ tail -n 20 "$(brew --prefix)/var/log/irisbrige.log"
 正常情况下会看到类似下面其中一条：
 
 ```text
-irisbrige-edge service: created editable env file at /Users/you/.config/irisbrige-edge/service.env
-irisbrige-edge service: loaded environment from /Users/you/.config/irisbrige-edge/service.env
+irisbrige-edge service: created editable env file at /Users/you/.config/irisbrige/service.env
+irisbrige-edge service: loaded environment from /Users/you/.config/irisbrige/service.env
 ```
 
 如果要确认某个非敏感变量已经进入运行中的服务进程，可以这样检查：
