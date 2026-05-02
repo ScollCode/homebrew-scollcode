@@ -1,15 +1,16 @@
 class IrisbrigeLocal < Formula
   desc "macOS relay for iOS and Codex App Server RPC (local build)"
   homepage "https://github.com/Irisbrige/homebrew-irisbrige"
-  version "0.41.0"
+  version "0.42.0"
 
   if Hardware::CPU.arm?
-    url "https://github.com/Irisbrige/homebrew-irisbrige/releases/download/v0.41.0/irisbrige-local_0.41.0_darwin_arm64.tar.gz"
-    sha256 "78413ea3ed7d5aabfcb20cbb296463e5d72c7d57a8fa9dd66ced42f464c5ef93"
+    url "https://github.com/Irisbrige/homebrew-irisbrige/releases/download/v0.42.0/irisbrige-local_0.42.0_darwin_arm64.tar.gz"
+    sha256 "7e2ca49e2fb22ff4a494596565f591d4fee984b8fdc22020db2be9de055d4b86"
   else
-    url "https://github.com/Irisbrige/homebrew-irisbrige/releases/download/v0.41.0/irisbrige-local_0.41.0_darwin_amd64.tar.gz"
-    sha256 "a304b55367a78378d1431b868f4a3b069108eec75e843cc7a1750fbb89cea5c7"
+    url "https://github.com/Irisbrige/homebrew-irisbrige/releases/download/v0.42.0/irisbrige-local_0.42.0_darwin_amd64.tar.gz"
+    sha256 "2671baf818134e16410869295a323c911402d291dc7324811d1d9c76ff174308"
   end
+
 
 
 
