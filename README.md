@@ -2,7 +2,7 @@
 
 [中文说明](./README_CN.md)
 
-`homebrew-irisbrige` provides macOS Homebrew formulae for `irisbrige-edge` and `irisbrige-local`, plus deployment entry points for `irisbrige-edge` on other supported platforms.
+`homebrew-irisbrige` provides macOS Homebrew formulae for `irisbrige-edge` and `irisbrige-local`, Linux deployment entry points for both builds, and Windows deployment entry points for `irisbrige-edge`.
 
 ## Contents
 
@@ -16,8 +16,8 @@
 ## Platform Guide
 
 - `macOS`: install and manage the service with Homebrew.
-- `Linux`: deploy with the included script or manually, then manage with `systemd`.
-- `Windows`: deploy with the included PowerShell installer or manually with WinSW.
+- `Linux`: deploy `irisbrige-edge` or `irisbrige-local` with the included script or manually, then manage with `systemd`.
+- `Windows`: deploy `irisbrige-edge` with the included PowerShell installer or manually with WinSW.
 
 <a id="macos"></a>
 ## macOS
@@ -155,7 +155,7 @@ ps eww -p "$PID" | grep -F 'IRISBRIGE_ENV_CHECK=service-ready'
 
 Linux deployment is documented separately. The Linux guide includes:
 
-- automatic deployment with the repository shell script
+- automatic deployment with repository shell scripts for `irisbrige-edge` and `irisbrige-local`
 - manual deployment without the script, including `systemd` setup
 
 See:
@@ -181,6 +181,8 @@ See:
 - [Formula/irisbrige-local.rb](./Formula/irisbrige-local.rb): Homebrew formula for the local macOS build
 - [scripts/install-irisbrige-edge-linux.sh](./scripts/install-irisbrige-edge-linux.sh): automated Linux deployment script
 - [scripts/uninstall-irisbrige-edge-linux.sh](./scripts/uninstall-irisbrige-edge-linux.sh): Linux uninstaller script
+- [scripts/install-irisbrige-local-linux.sh](./scripts/install-irisbrige-local-linux.sh): automated Linux deployment script for the local build
+- [scripts/uninstall-irisbrige-local-linux.sh](./scripts/uninstall-irisbrige-local-linux.sh): Linux uninstaller script for the local build
 - [scripts/install-irisbrige-edge-windows.ps1](./scripts/install-irisbrige-edge-windows.ps1): automated Windows deployment script
 - [scripts/uninstall-irisbrige-edge-windows.ps1](./scripts/uninstall-irisbrige-edge-windows.ps1): Windows uninstaller script
 - [linux.md](./linux.md): detailed Linux deployment guide
