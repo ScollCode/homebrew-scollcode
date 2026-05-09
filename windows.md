@@ -16,12 +16,14 @@ It covers two approaches:
 - [Option 1: Deploy with the Script](#option-1)
 - [Open an elevated PowerShell session](#open-an-elevated-powershell-session)
 - [Run the installer](#run-the-installer)
+- [Local build installer](#local-build-installer)
 - [Default locations](#default-locations)
 - [Default service settings](#default-service-settings)
 - [Common parameters](#common-parameters)
 - [Check service status and logs](#check-service-status-and-logs)
 - [Additional environment variables](#additional-environment-variables)
 - [Uninstall with the script](#uninstall-with-the-script)
+- [Local build uninstaller](#local-build-uninstaller)
 - [Option 2: Manual Deployment](#option-2)
 - [Detect the architecture](#detect-the-architecture)
 - [Resolve the latest build release](#resolve-the-latest-build-release)
@@ -116,6 +118,18 @@ The script automatically:
 - installs the executable and WinSW wrapper
 - writes the WinSW XML configuration
 - installs and starts the Windows service
+
+<a id="local-build-installer"></a>
+### Local build installer
+
+If you specifically want `irisbrige-local`, run the dedicated installer directly:
+
+```powershell
+$scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/install-irisbrige-local-windows.ps1"
+& ([ScriptBlock]::Create((Invoke-WebRequest -Uri $scriptUrl -UseBasicParsing).Content))
+```
+
+That installs `irisbrige-local`, writes the WinSW wrapper files, and registers the Windows service.
 
 <a id="default-locations"></a>
 ### 3. Default locations
@@ -248,6 +262,23 @@ If you also want to remove the data directory and logs:
 
 ```powershell
 $scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/$uninstallScript"
+& ([ScriptBlock]::Create((Invoke-WebRequest -Uri $scriptUrl -UseBasicParsing).Content)) -RemoveData
+```
+
+<a id="local-build-uninstaller"></a>
+### Local build uninstaller
+
+If you installed `irisbrige-local`, remove it directly with:
+
+```powershell
+$scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/uninstall-irisbrige-local-windows.ps1"
+& ([ScriptBlock]::Create((Invoke-WebRequest -Uri $scriptUrl -UseBasicParsing).Content))
+```
+
+To remove its data directory and logs as well:
+
+```powershell
+$scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/uninstall-irisbrige-local-windows.ps1"
 & ([ScriptBlock]::Create((Invoke-WebRequest -Uri $scriptUrl -UseBasicParsing).Content)) -RemoveData
 ```
 

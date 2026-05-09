@@ -15,6 +15,7 @@ It covers two approaches:
 - [Choose the Build](#choose-the-build)
 - [Option 1: Deploy with the Script](#option-1)
 - [Run the installer directly](#run-installer-directly)
+- [Local build installer](#local-build-installer)
 - [Default install locations](#default-install-locations)
 - [Default service user](#default-service-user)
 - [Common override variables](#common-override-variables)
@@ -22,6 +23,7 @@ It covers two approaches:
 - [Status and logs](#status-and-logs)
 - [Common management commands](#common-management-commands)
 - [Uninstall with the script](#uninstall-with-the-script)
+- [Local build uninstaller](#local-build-uninstaller)
 - [Option 2: Manual Deployment](#option-2)
 - [Detect the architecture](#detect-the-architecture)
 - [Resolve the latest release tag](#resolve-the-latest-release-tag)
@@ -96,6 +98,18 @@ The script automatically:
 - runs `systemctl daemon-reload`
 - runs `systemctl enable ${SERVICE_NAME}`
 - starts or restarts the service
+
+<a id="local-build-installer"></a>
+### Local build installer
+
+If you specifically want `irisbrige-local`, run the dedicated installer directly:
+
+```bash
+curl -fsSL \
+  "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/install-irisbrige-local-linux.sh" | sudo bash
+```
+
+That installs `irisbrige-local` and creates the `irisbrige-local` `systemd` service.
 
 <a id="default-install-locations"></a>
 ### 2. Default install locations
@@ -233,6 +247,16 @@ Default behavior:
 - removes `/etc/systemd/system/${SERVICE_NAME}.service`
 - removes `/usr/local/bin/${BINARY_NAME}`
 - reloads `systemd`
+
+<a id="local-build-uninstaller"></a>
+### Local build uninstaller
+
+If you installed `irisbrige-local`, you can remove it directly with:
+
+```bash
+curl -fsSL \
+  "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/uninstall-irisbrige-local-linux.sh" | sudo bash
+```
 
 <a id="option-2"></a>
 ## Option 2: Manual Deployment

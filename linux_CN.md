@@ -15,6 +15,7 @@
 - [选择构建版本](#choose-the-build-zh)
 - [方式一：使用脚本自动部署](#option-1-zh)
 - [直接执行安装脚本](#run-installer-directly-zh)
+- [local 构建安装脚本](#local-build-installer-zh)
 - [默认安装位置](#default-install-locations-zh)
 - [默认运行用户](#default-service-user-zh)
 - [常见可覆盖变量](#common-override-variables-zh)
@@ -22,6 +23,7 @@
 - [查看服务状态和日志](#status-and-logs-zh)
 - [常见管理命令](#common-management-commands-zh)
 - [使用脚本卸载](#uninstall-with-the-script-zh)
+- [local 构建卸载脚本](#local-build-uninstaller-zh)
 - [方式二：不使用脚本，手动部署](#option-2-zh)
 - [确认架构](#detect-the-architecture-zh)
 - [获取最新版本标签](#resolve-the-latest-release-tag-zh)
@@ -96,6 +98,18 @@ curl -fsSL \
 - 执行 `systemctl daemon-reload`
 - 执行 `systemctl enable ${SERVICE_NAME}`
 - 启动或重启服务
+
+<a id="local-build-installer-zh"></a>
+### local 构建安装脚本
+
+如果你明确要安装 `irisbrige-local`，可以直接执行专用安装脚本：
+
+```bash
+curl -fsSL \
+  "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/install-irisbrige-local-linux.sh" | sudo bash
+```
+
+这条命令会安装 `irisbrige-local`，并创建 `irisbrige-local` 的 `systemd` 服务。
 
 <a id="default-install-locations-zh"></a>
 ### 2. 默认安装位置
@@ -233,6 +247,16 @@ curl -fsSL \
 - 删除 `/etc/systemd/system/${SERVICE_NAME}.service`
 - 删除 `/usr/local/bin/${BINARY_NAME}`
 - 重新加载 `systemd`
+
+<a id="local-build-uninstaller-zh"></a>
+### local 构建卸载脚本
+
+如果你安装的是 `irisbrige-local`，可以直接执行：
+
+```bash
+curl -fsSL \
+  "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/uninstall-irisbrige-local-linux.sh" | sudo bash
+```
 
 <a id="option-2-zh"></a>
 ## 方式二：不使用脚本，手动部署

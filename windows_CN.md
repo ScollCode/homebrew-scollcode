@@ -16,12 +16,14 @@
 - [方式一：使用脚本自动部署](#option-1-zh)
 - [以管理员身份打开 PowerShell](#open-an-elevated-powershell-session-zh)
 - [执行安装脚本](#run-the-installer-zh)
+- [local 构建安装脚本](#local-build-installer-zh)
 - [默认安装位置](#default-locations-zh)
 - [默认服务设置](#default-service-settings-zh)
 - [常用参数](#common-parameters-zh)
 - [查看服务状态和日志](#check-service-status-and-logs-zh)
 - [如需额外环境变量](#additional-environment-variables-zh)
 - [使用脚本卸载](#uninstall-with-the-script-zh)
+- [local 构建卸载脚本](#local-build-uninstaller-zh)
 - [方式二：手动部署](#option-2-zh)
 - [检测架构](#detect-the-architecture-zh)
 - [获取最新构建 release](#resolve-the-latest-build-release-zh)
@@ -116,6 +118,18 @@ $scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/ref
 - 安装可执行文件和 WinSW wrapper
 - 生成 WinSW XML 配置
 - 安装并启动 Windows 服务
+
+<a id="local-build-installer-zh"></a>
+### local 构建安装脚本
+
+如果你明确要安装 `irisbrige-local`，可以直接执行专用安装脚本：
+
+```powershell
+$scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/install-irisbrige-local-windows.ps1"
+& ([ScriptBlock]::Create((Invoke-WebRequest -Uri $scriptUrl -UseBasicParsing).Content))
+```
+
+这条命令会安装 `irisbrige-local`，生成 WinSW wrapper 文件，并注册对应的 Windows 服务。
 
 <a id="default-locations-zh"></a>
 ### 3. 默认安装位置
@@ -248,6 +262,23 @@ $scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/ref
 
 ```powershell
 $scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/$uninstallScript"
+& ([ScriptBlock]::Create((Invoke-WebRequest -Uri $scriptUrl -UseBasicParsing).Content)) -RemoveData
+```
+
+<a id="local-build-uninstaller-zh"></a>
+### local 构建卸载脚本
+
+如果你安装的是 `irisbrige-local`，可以直接执行：
+
+```powershell
+$scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/uninstall-irisbrige-local-windows.ps1"
+& ([ScriptBlock]::Create((Invoke-WebRequest -Uri $scriptUrl -UseBasicParsing).Content))
+```
+
+如果还要一起删除数据目录和日志：
+
+```powershell
+$scriptUrl = "https://raw.githubusercontent.com/Irisbrige/homebrew-irisbrige/refs/heads/main/scripts/uninstall-irisbrige-local-windows.ps1"
 & ([ScriptBlock]::Create((Invoke-WebRequest -Uri $scriptUrl -UseBasicParsing).Content)) -RemoveData
 ```
 
