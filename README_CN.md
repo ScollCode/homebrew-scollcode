@@ -2,7 +2,7 @@
 
 [English](./README.md)
 
-`homebrew-irisbrige` 提供 macOS 上 `irisbrige-edge` 和 `irisbrige-local` 的 Homebrew formula，同时提供这两个构建在 Linux 上的部署入口，以及 `irisbrige-edge` 在 Windows 上的部署入口。
+`homebrew-irisbrige` 提供 macOS 上 `irisbrige-edge` 和 `irisbrige-local` 的 Homebrew formula，同时提供这两个构建在 Linux 和 Windows 上的部署入口。
 
 ## 目录
 
@@ -17,7 +17,7 @@
 
 - `macOS`：通过 Homebrew 安装和管理服务。
 - `Linux`：通过仓库内脚本或手动方式部署 `irisbrige-edge` / `irisbrige-local`，并使用 `systemd` 管理。
-- `Windows`：通过仓库内 PowerShell 安装脚本或使用 WinSW 手动部署 `irisbrige-edge` 服务。
+- `Windows`：通过仓库内 PowerShell 安装脚本或使用 WinSW 手动部署 `irisbrige-edge` / `irisbrige-local` 服务。
 
 <a id="macos-zh"></a>
 ## macOS
@@ -167,7 +167,7 @@ Linux 部署说明单独放在文档中，包括：
 
 Windows 部署说明单独放在文档中，包括：
 
-- 使用仓库内 PowerShell 安装脚本自动部署
+- 使用仓库内 PowerShell 安装脚本自动部署 `irisbrige-edge` 和 `irisbrige-local`
 - 使用 WinSW 手动部署服务
 
 详细说明见：
@@ -185,5 +185,7 @@ Windows 部署说明单独放在文档中，包括：
 - [scripts/uninstall-irisbrige-local-linux.sh](./scripts/uninstall-irisbrige-local-linux.sh)：local 版本的 Linux 卸载脚本
 - [scripts/install-irisbrige-edge-windows.ps1](./scripts/install-irisbrige-edge-windows.ps1)：Windows 自动部署脚本
 - [scripts/uninstall-irisbrige-edge-windows.ps1](./scripts/uninstall-irisbrige-edge-windows.ps1)：Windows 卸载脚本
+- [scripts/install-irisbrige-local-windows.ps1](./scripts/install-irisbrige-local-windows.ps1)：local 版本的 Windows 自动部署脚本
+- [scripts/uninstall-irisbrige-local-windows.ps1](./scripts/uninstall-irisbrige-local-windows.ps1)：local 版本的 Windows 卸载脚本
 - [linux_CN.md](./linux_CN.md)：Linux 中文部署文档
 - [windows_CN.md](./windows_CN.md)：Windows 中文部署文档
